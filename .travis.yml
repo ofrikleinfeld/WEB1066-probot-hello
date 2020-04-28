@@ -16,8 +16,8 @@ install:
 script:
   - docker run --rm probot-hello npm run $NPM_TARGET
 
-after_success:
-  - set -x -v -e;
+after_success: |
+  set -x -v -e;
   if [ $NPM_TARGET == "test" ]; then
     docker tag probot-hello probot-hello:$(git rev-parse HEAD);
   else
