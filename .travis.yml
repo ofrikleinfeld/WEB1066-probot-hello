@@ -1,10 +1,6 @@
 services:
   - docker
 
-env:
-  - NODE_VERSION=8-jessie
-  - NODE_VERSION=10-jessie
-
 stages:
   - test
   - npm-targets
