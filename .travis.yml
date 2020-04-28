@@ -5,10 +5,6 @@ env:
   - NODE_VERSION=8-jessie
   - NODE_VERSION=10-jessie
 
-stages:
-  - test
-  - npm-targets
-
 script:
   - docker login -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD
   - docker build -t node:$NODE_VERSION --build-arg NODE_IMAGE="node:${NODE_VERSION}" .
@@ -16,6 +12,10 @@ script:
   - docker tag node:$NODE_VERSION $DOCKER_USERNAME/probot-hello:$NODE_VERSION-$(git rev-parse HEAD)
   - docker push $DOCKER_USERNAME/probot-hello:$NODE_VERSION-$(git rev-parse HEAD)
 
+stages:
+  - test
+  - npm-targets
+  
 jobs:
   include:
 
