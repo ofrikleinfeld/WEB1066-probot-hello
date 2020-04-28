@@ -15,11 +15,11 @@ jobs:
       name: "build and push node 8-jessie"
       install: skip
       script:
-          - docker login -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD
-          - docker build -t node:$NODE_VERSION --build-arg NODE_IMAGE="node:${NODE_VERSION}" .
-          - docker image list
-          - docker tag node:$NODE_VERSION $DOCKER_USERNAME/probot-hello:$NODE_VERSION-$(git rev-parse HEAD)
-          - docker push $DOCKER_USERNAME/probot-hello:$NODE_VERSION-$(git rev-parse HEAD)
+        - docker login -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD
+        - docker build -t node:$NODE_VERSION --build-arg NODE_IMAGE="node:${NODE_VERSION}" .
+        - docker image list
+        - docker tag node:$NODE_VERSION $DOCKER_USERNAME/probot-hello:$NODE_VERSION-$(git rev-parse HEAD)
+        - docker push $DOCKER_USERNAME/probot-hello:$NODE_VERSION-$(git rev-parse HEAD)
       env:
         - NODE_VERSION=8-jessie
 
@@ -27,11 +27,11 @@ jobs:
       name: "build and push node 10-jessie"
       install: skip
       script:
-          - docker login -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD
-          - docker build -t node:$NODE_VERSION --build-arg NODE_IMAGE="node:${NODE_VERSION}" .
-          - docker image list
-          - docker tag node:$NODE_VERSION $DOCKER_USERNAME/probot-hello:$NODE_VERSION-$(git rev-parse HEAD)
-          - docker push $DOCKER_USERNAME/probot-hello:$NODE_VERSION-$(git rev-parse HEAD)
+        - docker login -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD
+        - docker build -t node:$NODE_VERSION --build-arg NODE_IMAGE="node:${NODE_VERSION}" .
+        - docker image list
+        - docker tag node:$NODE_VERSION $DOCKER_USERNAME/probot-hello:$NODE_VERSION-$(git rev-parse HEAD)
+        - docker push $DOCKER_USERNAME/probot-hello:$NODE_VERSION-$(git rev-parse HEAD)
       env:
         - NODE_VERSION=10-jessie
 
