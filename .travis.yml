@@ -6,9 +6,9 @@ before_install:
   - docker pull node:8-onbuild
 
 env:
-  NPM_TARGET=test
-  NPM_TARGET=lint
-  NPM_TARGET=coverage
+  - NPM_TARGET=test
+  - NPM_TARGET=lint
+  - NPM_TARGET=coverage
 
 install:
   - docker build -t probot-hello .
