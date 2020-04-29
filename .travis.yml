@@ -1,9 +1,87 @@
-sudo: required
 services:
   - docker
 
-before_install:
-  - docker build -t probot-hello .
+stages:
+  - test
+  - npm-targets
 
-script:
-  - docker run --rm probot-hello npm run test
+jobs:
+  include:
+    - stage: test
+      name: "build and push node 8-jessie"
+      install: skip
+      script:
+        - docker login -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD
+        - docker build -t node:$NODE_VERSION --build-arg NODE_IMAGE="node:${NODE_VERSION}" .
+        - docker image list
+        - docker tag node:$NODE_VERSION $DOCKER_USERNAME/probot-hello:$NODE_VERSION-$(git rev-parse HEAD)
+        - docker push $DOCKER_USERNAME/probot-hello:$NODE_VERSION-$(git rev-parse HEAD)
+      env:
+        - NODE_VERSION=8-jessie
+
+    - stage: test
+      name: "build and push node 10-jessie"
+      install: skip
+      script:
+        - docker login -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD
+        - docker build -t node:$NODE_VERSION --build-arg NODE_IMAGE="node:${NODE_VERSION}" .
+        - docker image list
+        - docker tag node:$NODE_VERSION $DOCKER_USERNAME/probot-hello:$NODE_VERSION-$(git rev-parse HEAD)
+        - docker push $DOCKER_USERNAME/probot-hello:$NODE_VERSION-$(git rev-parse HEAD)
+      env:
+        - NODE_VERSION=10-jessie
+
+    - stage: npm-targets
+      name: "8-jessie test"
+      install: skip
+      script:
+        - docker run --rm $DOCKER_USERNAME/probot-hello:$NODE_VERSION-$(git rev-parse HEAD) npm run $NPM_TARGET
+      env:
+        - NODE_VERSION=8-jessie
+        - NPM_TARGET=test
+
+    - stage: npm-targets
+      name: "8-jessie lint"
+      install: skip
+      script:
+        - docker run --rm $DOCKER_USERNAME/probot-hello:$NODE_VERSION-$(git rev-parse HEAD) npm run $NPM_TARGET
+      env:
+        - NODE_VERSION=8-jessie
+        - NPM_TARGET=lint
+
+    - stage: npm-targets
+      name: "8-jessie coverage"
+      install: skip
+      script:
+        - docker run --rm $DOCKER_USERNAME/probot-hello:$NODE_VERSION-$(git rev-parse HEAD) npm run $NPM_TARGET
+      env:
+        - NODE_VERSION=8-jessie
+        - NPM_TARGET=coverage
+
+    - stage: npm-targets
+      name: "10-jessie test"
+      install: skip
+      script:
+        - docker run --rm $DOCKER_USERNAME/probot-hello:$NODE_VERSION-$(git rev-parse HEAD) npm run $NPM_TARGET
+      env:
+        - NODE_VERSION=10-jessie
+        - NPM_TARGET=test
+
+    - stage: npm-targets
+      name: "10-jessie lint"
+      install: skip
+      script:
+        - docker run --rm $DOCKER_USERNAME/probot-hello:$NODE_VERSION-$(git rev-parse HEAD) npm run $NPM_TARGET
+      env:
+        - NODE_VERSION=10-jessie
+        - NPM_TARGET=lint
+
+    - stage: npm-targets
+      name: "10-jessie coverage"
+      install: skip
+      script:
+        - docker run --rm $DOCKER_USERNAME/probot-hello:$NODE_VERSION-$(git rev-parse HEAD) npm run $NPM_TARGET
+      if: branch = master
+      env:
+        - NODE_VERSION=10-jessie
+        - NPM_TARGET=coverage
